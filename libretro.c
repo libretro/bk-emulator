@@ -418,13 +418,14 @@ static bool load_game_real(const char *image_path,
 
 	if (image_path) {
                 char *slash = strrchr(image_path, '/');
+                if (!slash) slash = strrchr(image_path, '\\');
                 if (slash) {
                         tape_prefix = strdup(image_path);
                         tape_prefix[slash - image_path + 1] = '\0';
                 }
         }
 	
-	if (bin) {
+		if (bin) {
 		void *gd = malloc(bin_size);
 		if (!gd)
 			return false;
