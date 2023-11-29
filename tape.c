@@ -214,13 +214,13 @@ void fake_read_strobe() {
 		get_emt36_filename();
                 char *alloc_fullpath = NULL;
                 const char * fullpath = unix_filename;
-                if (tape_prefix != NULL) {
+				if (tape_prefix != NULL) {
                         int al = strlen(unix_filename) + strlen(tape_prefix) + 7;
                         alloc_fullpath = malloc (al+1);
                         strncpy(alloc_fullpath, tape_prefix, al);
                         strncat(alloc_fullpath, unix_filename, al);
                         fullpath = alloc_fullpath;
-                }
+				}
                 tape_read_file = fopen(fullpath, "r");
                 if (!tape_read_file) {
 			char *ptr;
@@ -233,6 +233,20 @@ void fake_read_strobe() {
 			}
 			fullpath = alloc_fullpath;
 			tape_read_file = fopen(fullpath, "r");
+
+			if (!tape_read_file) {
+				//Game can ask for file with or without extension (filename / filename.ext),
+				//which should be resolved to filename.bin and filename.ext.bin respectively
+				char* dot = strrchr(fullpath, '.');
+				if (!dot || !strcmp(dot, ".bin")) {
+					int al2 = strlen(fullpath) + 4;
+					char* alloc_fullpath2 = malloc(al2 + 1);
+					strncpy(alloc_fullpath2, fullpath, al2);
+					strncat(alloc_fullpath2, ".bin", al2);
+					fullpath = alloc_fullpath2;
+					tape_read_file = fopen(fullpath, "r");
+				}
+			}
 		}
 		fprintf(stderr, _("Will read unix file <%s> under BK name <%s>\n"),
 			fullpath, bk_filename);
