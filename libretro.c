@@ -425,7 +425,7 @@ static bool load_game_real(const char *image_path,
                 }
         }
 	
-		if (bin) {
+	if (bin) {
 		void *gd = malloc(bin_size);
 		if (!gd)
 			return false;
