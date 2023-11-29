@@ -91,6 +91,11 @@ static const struct keymap qwerty = {
 		[RETROK_RIGHT]        = 031,
 		[RETROK_DOWN]         = 033,
 
+		[RETROK_KP7]          = 034,
+		[RETROK_KP9]          = 035,
+		[RETROK_KP1]          = 036,
+		[RETROK_KP3]          = 037,
+
 		[RETROK_HOME]         = 023,         /* vs */
 	},
 	.shifted = {
