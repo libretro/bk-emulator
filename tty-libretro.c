@@ -13,6 +13,8 @@ struct keymap {
 	int shifted[RETROK_LAST];
 };
 
+//BK Keycodes here: https://bk0010.pdp-11.ru/docs/out.html (check 8.3)
+
 static const struct keymap qwerty = {
 	.normal = {
 		[RETROK_ESCAPE]       = TTY_STOP,
@@ -26,9 +28,11 @@ static const struct keymap qwerty = {
 		[RETROK_F8]           = 0220,          /* step */
 		[RETROK_F9]           = 014,           /* clear */
 		[RETROK_F10]          = TTY_STOP,      /* Stop (red button)*/
-		[RETROK_F11]          = 016,
-		[RETROK_F12]          = 017,
+		[RETROK_F11]          = 016,           /* RUS */
+		[RETROK_F12]          = 017,           /* LAT */
 		[RETROK_BREAK]        = TTY_STOP,
+		[RETROK_INSERT]       = 016,		   /* RUS */
+		[RETROK_PAGEUP]       = 017,           /* LAT */
 
 		[RETROK_BACKQUOTE]    = '`',
 		[RETROK_1]            = '1',
@@ -342,6 +346,9 @@ static RETRO_CALLCONV void keyboard_cb(bool down, unsigned keycode,
 	    c |= 0200;
 	}
 	tty_keyevent(c);
+
+
+	//fprintf(stderr, "Send keycode: <%d>\n", c);
 }
 
 void
