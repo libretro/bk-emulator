@@ -25,6 +25,7 @@ unsigned char tape_read_val = 1, tape_write_val = 0;
 FILE * tape_read_file = NULL;
 FILE * tape_write_file = NULL;
 char * tape_prefix = NULL;
+char * tape_suffix = NULL;
 unsigned char tape_status = 1; /* 0 = tape moving, 1 = tape stopped */
 
 flag_t fake_tape = 1;	/* Default */
@@ -149,8 +150,25 @@ get_emt36_filename() {
 		bk_filename[2*i+1] = d >> 8;
 	}
 	bk_filename[16] = '\0';
-	for (i = 15; i >= 0 && bk_filename[i] == ' '; unix_filename[i--]='\0');
+
+	bool append_ext = false;
+	int name_end_index = 15;
+	char ext[5]; ext[4] = '\0';
+	memcpy(ext, &bk_filename[6], 4);
+	if (strcmp(ext, ".BIN") == 0) { name_end_index = 5; append_ext = true; }
+	if (strcmp(ext, ".COD") == 0) { name_end_index = 5; append_ext = true; }
+	if (strcmp(ext, ".ASC") == 0) { name_end_index = 5; append_ext = true; }
+
+	//fprintf(stderr, _("Bk_filename: <%s>\n"), bk_filename);
+	//fprintf(stderr, _("append_ext: <%s>\n"), append_ext);
+	//fprintf(stderr, _("name_end_index: <%s>\n"), name_end_index);
+
+	for (i = name_end_index; i >= 0 && bk_filename[i] == ' '; unix_filename[i--]='\0');
+	int trimmed_name_end_index = i;
 	for (; i >= 0; i--) unix_filename[i] = bk_filename[i];
+	if (append_ext) { memcpy(&unix_filename[trimmed_name_end_index + 1], &ext[0], 5); }
+
+	fprintf(stderr, _("Unix filename: <%s>\n"), unix_filename);
 }
 
 /*
@@ -212,13 +230,27 @@ void fake_read_strobe() {
 	if (fake_state == Idle && !tape_read_file) {
 		/* First time here, find which file to open */
 		get_emt36_filename();
+		//fprintf(stderr, _("Unix file: <%s>\n"), unix_filename);
+		//char* fname = rtrim(unix_filename);
+		//fprintf(stderr, _("Unix file trimmed: <%s>\n"), fname);
+
+		//char* snum[5];
+		//itoa((int)unix_filename[5], snum, 10);
+		//fprintf(stderr, _("6th fname char: <%s>\n"), snum);
+
                 char *alloc_fullpath = NULL;
                 const char * fullpath = unix_filename;
+				
+				fprintf(stderr, _("UNIX FILENAME: <%s>\n"), unix_filename);
+				if (strcmp(unix_filename, "GAME") == 0 && tape_suffix != NULL) { fullpath = tape_suffix; }
+				fprintf(stderr, _("TAPE SUFFIX: <%s>\n"), tape_suffix);
+				fprintf(stderr, _("FULLPATH: <%s>\n"), fullpath);
+
 				if (tape_prefix != NULL) {
-                        int al = strlen(unix_filename) + strlen(tape_prefix) + 7;
+                        int al = strlen(fullpath) + strlen(tape_prefix) + 7;
                         alloc_fullpath = malloc (al+1);
                         strncpy(alloc_fullpath, tape_prefix, al);
-                        strncat(alloc_fullpath, unix_filename, al);
+                        strncat(alloc_fullpath, fullpath, al);
                         fullpath = alloc_fullpath;
 				}
                 tape_read_file = fopen(fullpath, "r");
@@ -227,7 +259,7 @@ void fake_read_strobe() {
 			if (alloc_fullpath)
 				ptr = alloc_fullpath + strlen(tape_prefix);
 			else
-				ptr = alloc_fullpath = strdup(unix_filename);
+				ptr = alloc_fullpath = strdup(fullpath);
 			for (; *ptr; ptr++) {
 				*ptr = tolower(*ptr);
 			}

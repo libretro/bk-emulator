@@ -571,6 +571,7 @@ static inline enum joystick_state JOYSTICK_BUTTON(int idx) {
 void platform_disk_init(disk_t *disks);
 
 extern char * tape_prefix;
+extern char * tape_suffix;
 
 void load_and_run_bin(const void *data, size_t sz);
 void *load_rom_file(const char * rompath, size_t *sz, size_t min_sz, size_t max_sz);

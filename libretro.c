@@ -416,16 +416,24 @@ static bool load_game_real(const char *image_path,
 	const char *dir;
 	int i;
 
+	bool is_basic = false;
+	bool is_focal = false;
 	if (image_path) {
                 char *slash = strrchr(image_path, '/');
                 if (!slash) slash = strrchr(image_path, '\\');
                 if (slash) {
                         tape_prefix = strdup(image_path);
                         tape_prefix[slash - image_path + 1] = '\0';
+						tape_suffix = slash + 1;
+						//fprintf(stderr, "Tape suffix is: <%s>\n", tape_suffix);
                 }
+				is_basic = strstr(image_path, "basic") != NULL;
+				is_focal = strstr(image_path, "focal") != NULL;
+				if (is_basic) bkmodel = 1;
+				else if (is_focal) bkmodel = 0;
         }
 	
-		if (bin) {
+	if (bin && !is_basic && !is_focal) {
 		void *gd = malloc(bin_size);
 		if (!gd)
 			return false;
