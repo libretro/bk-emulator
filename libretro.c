@@ -429,8 +429,6 @@ static bool load_game_real(const char *image_path,
                 }
 				is_basic = strstr(image_path, "basic") != NULL;
 				is_focal = strstr(image_path, "focal") != NULL;
-				if (is_basic) bkmodel = 1;
-				else if (is_focal) bkmodel = 0;
         }
 	
 	if (bin && !is_basic && !is_focal) {
@@ -477,6 +475,9 @@ static bool load_game_real(const char *image_path,
 	}
 
 	update_variables(true);
+	
+	if (is_basic) bkmodel = 1;
+	else if (is_focal) bkmodel = 0;
 
 	switch( bkmodel ) {
 	case 0: /* BK0010 */
