@@ -252,7 +252,7 @@ void fake_read_strobe() {
                         strncpy(alloc_fullpath, tape_prefix, al);
                         strncat(alloc_fullpath, fullpath, al);
                         fullpath = alloc_fullpath;
-				}
+                }
                 tape_read_file = fopen(fullpath, "r");
                 if (!tape_read_file) {
 			char *ptr;
