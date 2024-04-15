@@ -36,6 +36,23 @@ static enum { Idle, Addr, Len, Name, Data, Checksum } fake_state = Idle;
 
 #define TAPE_RELAY_DELAY	10000
 
+char* strtoupper(char* str) {
+	int len = strlen(str);
+
+	//Allocate space for new string
+	char* upper = (char*)malloc(sizeof(char) * (len + 1));
+
+	//Add null terminator to string
+	upper[len] = '\0';
+
+	//Convert characters to uppercase one by one
+	for (int i = 0; i < len; i++) {
+		upper[i] = toupper(str[i]);
+	}
+
+	return upper;
+}
+
 void tape_init() {
 	if (tape_read_file) {
 	    if (fake_tape) {
@@ -240,11 +257,19 @@ void fake_read_strobe() {
 
                 char *alloc_fullpath = NULL;
                 const char * fullpath = unix_filename;
+				char* unix_filename_upper = strtoupper(unix_filename);
+
+				if (tape_suffix != NULL) {
+					if (strcmp(unix_filename_upper, "GAME") == 0)          { fullpath = tape_suffix; }
+					else if (strcmp(unix_filename_upper, "GAME.BIN") == 0) { fullpath = tape_suffix; }
+					else if (strcmp(unix_filename_upper, "GAME.COD") == 0) { fullpath = tape_suffix; }
+					else if (strcmp(unix_filename_upper, "GAME.ASC") == 0) { fullpath = tape_suffix; }
+				}
+				//fprintf(stderr, _("UNIX FILENAME: <%s>\n"), unix_filename);
+				//fprintf(stderr, _("UNIX FILENAME UPPER: <%s>\n"), unix_filename_upper);
+				//fprintf(stderr, _("TAPE SUFFIX: <%s>\n"), tape_suffix);
+				//fprintf(stderr, _("FULLPATH: <%s>\n"), fullpath);
 				
-				fprintf(stderr, _("UNIX FILENAME: <%s>\n"), unix_filename);
-				if (strcmp(unix_filename, "GAME") == 0 && tape_suffix != NULL) { fullpath = tape_suffix; }
-				fprintf(stderr, _("TAPE SUFFIX: <%s>\n"), tape_suffix);
-				fprintf(stderr, _("FULLPATH: <%s>\n"), fullpath);
 
 				if (tape_prefix != NULL) {
                         int al = strlen(fullpath) + strlen(tape_prefix) + 7;
