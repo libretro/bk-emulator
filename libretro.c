@@ -427,8 +427,8 @@ static bool load_game_real(const char *image_path,
 						tape_suffix = slash + 1;
 						//fprintf(stderr, "Tape suffix is: <%s>\n", tape_suffix);
                 }
-				is_basic = strstr(image_path, "basic") != NULL;
-				is_focal = strstr(image_path, "focal") != NULL;
+				is_basic = strstr(strtoupper(image_path), "BASIC") != NULL;
+				is_focal = strstr(strtoupper(image_path), "FOCAL") != NULL;
         }
 	
 	if (bin && !is_basic && !is_focal) {
