@@ -516,7 +516,6 @@ tty_poll() {
 			}
 
 			//Color mode hotkey
-			//if (keycode == RETROK_KP5 && newstate) {
 			if (curc && curc == 10000 && newstate) {
 				struct retro_variable var = { 0 };
 				var.key = "bk_color";
