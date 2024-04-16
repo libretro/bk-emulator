@@ -513,6 +513,24 @@ tty_poll() {
 				if (newstate)
 					c = curc;
 			}
+
+			//Color mode hotkey
+			if (keycode == RETROK_KP5 && newstate) {
+				struct retro_variable var = { 0 };
+				var.key = "bk_color";
+				var.value = NULL;
+				if (environ_cb(RETRO_ENVIRONMENT_GET_VARIABLE, &var) && var.value) {
+					if (strcmp(var.value, "enabled") == 0)
+						var.value = "disabled";
+					else
+						var.value = "enabled";
+				}
+				else {
+					var.value = "disabled";
+				}
+				environ_cb(RETRO_ENVIRONMENT_SET_VARIABLE, &var);
+			}
+				
 		}
 	}
 
