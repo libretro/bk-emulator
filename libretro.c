@@ -132,65 +132,52 @@ enum {
 	SUBSYSTEM_4_FLOPPIES,
 };
 
-void retro_set_environment(retro_environment_t cb)
-{
-	struct retro_log_callback logging;
-	bool no_rom = true;
-
-	environ_cb = cb;
-
-	cb(RETRO_ENVIRONMENT_SET_SUPPORT_NO_GAME, &no_rom);
-
-	if (cb(RETRO_ENVIRONMENT_GET_LOG_INTERFACE, &logging))
-		log_cb = logging.log;
-	else
-		log_cb = fallback_log;
-
+void set_options_v1(retro_environment_t cb) {
 	static struct retro_variable variables[] =
+	{
 		{
-			{
-				"bk_model",
-				"Model (restart); BK-0010|BK-0010.01|BK-0010.01 + FDD|BK-0011M + FDD|Terak 8510/a|Slow BK-0011M",
-			},
-			{
-				"bk_peripheral",
-				"Peripheral (UP port, restart); none|covox|ay_3_8910|mouse_high|mouse_low|joystick",
-			},
-			{
-				"bk_layout",
-				"Keyboard layout; qwerty|jcuken",
-			},
-			{
-				"bk_doublespeed",
-				"Double CPU speed; disabled|enabled",
-			},
-			{
-				"bk_color",
-				"Use color display; enabled|disabled",
-			},
-			{
-				"bk_keyboard_type",
-				"Keyboard type (restart); poll|callback",
-			},
-			{
-				"bk_aspect_ratio",
-				"Aspect ratio; 1:1|4:3",
-			},
-			{ "input_repeat", "", },
-			{ "input_kt", "", },
-			{ "input_r2", "", },
-			{ "input_l1", "", },
-			{ "input_r1", "", },
-			{ "input_indsu", "", },
-			{ "input_block", "", },
-			{ "input_step", "", },
-			{ "input_reset", "", },
-			{ "input_tab", "", },
-			{ "input_vs", "", },
-			{ "input_rus", "", },
-			{ "input_lat", "", },
-			{ NULL, NULL },
-		};
+			"bk_model",
+			"Model (restart); BK-0010|BK-0010.01|BK-0010.01 + FDD|BK-0011M + FDD|Terak 8510/a|Slow BK-0011M",
+		},
+		{
+			"bk_peripheral",
+			"Peripheral (UP port, restart); none|covox|ay_3_8910|mouse_high|mouse_low|joystick",
+		},
+		{
+			"bk_layout",
+			"Keyboard layout; qwerty|jcuken",
+		},
+		{
+			"bk_doublespeed",
+			"Double CPU speed; disabled|enabled",
+		},
+		{
+			"bk_color",
+			"Use color display; enabled|disabled",
+		},
+		{
+			"bk_keyboard_type",
+			"Keyboard type (restart); poll|callback",
+		},
+		{
+			"bk_aspect_ratio",
+			"Aspect ratio; 1:1|4:3",
+		},
+		{ "input_repeat", "", },
+		{ "input_kt", "", },
+		{ "input_r2", "", },
+		{ "input_l1", "", },
+		{ "input_r1", "", },
+		{ "input_indsu", "", },
+		{ "input_block", "", },
+		{ "input_step", "", },
+		{ "input_reset", "", },
+		{ "input_tab", "", },
+		{ "input_vs", "", },
+		{ "input_rus", "", },
+		{ "input_lat", "", },
+		{ NULL, NULL },
+	};
 
 	char buf[20][1024];
 	char* inp_opt = "Tilde|Insert|Delete|Home|End|PageUP|PageDown|Tab|LShift|RShift|LAlt|RAlt|LCtrl|RCtrl|Keypad_0|Keypad_1|Keypad_2|Keypad_3|Keypad_4|Keypad_5|Keypad_6|Keypad_7|Keypad_8|Keypad_9|Keypad_Divide|Keypad_Multiply|Keypad_Add|Keypad_Substract|Keypad_Dot|Keypad_Enter|F1|F2|F3|F4|F5|F6|F7|F8|F9|F10|F11|F12";
@@ -224,6 +211,218 @@ void retro_set_environment(retro_environment_t cb)
 	snprintf(buf[11], sizeof(buf[11]), "Input -> Rus; %s", inp_opt);  variables[18].value = buf[11];
 	snprintf(buf[12], sizeof(buf[12]), "Input -> Lat; %s", inp_opt);  variables[19].value = buf[12];
 	cb(RETRO_ENVIRONMENT_SET_VARIABLES, variables);
+}
+void set_options_v2(retro_environment_t cb) {
+	struct retro_core_option_v2_category option_cats[] = {
+		{
+			"system",
+			"System",
+			"Configure system parameters."
+		},
+		{
+			"input",
+			"Input",
+			"Remap keyboard system keys."
+		},
+		{ NULL, NULL, NULL },
+	};
+	struct retro_core_option_v2_definition option_defs[] = {
+		{
+			"bk_model",						//Key
+			"Model (restart)",				//Description
+			NULL,							//descr_categorized
+			"Model of the emulated computer.",
+			NULL,							//info categorized
+			"system",						//category_key
+			{
+				{ "BK-0010", "BK-0010" },
+				{ "BK-0010.01", "BK-0010.01" },
+				{ "BK-0010.01 + FDD", "BK-0010.01 + FDD" },
+				{ "BK-0011M + FDD", "BK-0011M + FDD" },
+				{ "Terak 8510/a", "Terak 8510/a" },
+				{ "Slow BK-0011M", "Slow BK-0011M" },
+				{ NULL, NULL },
+			},
+			"BK-0010",						//default_value
+		},
+		{
+			"lynx_force_60hz",
+			"Peripheral (UP port, restart)",
+			NULL,
+			NULL,
+			NULL,
+			"system",
+			{
+				{ "none", "None" },
+				{ "covox", "Covox" },
+				{ "ay_3_8910", "AY 3 8910" },
+				{ "mouse_high", "Mouse (high)" },
+				{ "mouse_low", "Mouse (low)" },
+				{ "joystick", "Joystick" },
+				{ NULL, NULL },
+			},
+			"none"
+		},
+		{
+			"bk_doublespeed",
+			"Double CPU speed",
+			NULL,
+			NULL,
+			NULL,
+			"system",
+			{
+				{ "disabled", NULL },
+				{ "enabled", NULL },
+				{ NULL, NULL },
+			},
+			"disabled"
+		},
+		{
+			"bk_color",
+			"Use color display",
+			NULL,
+			NULL,
+			NULL,
+			"system",
+			{
+				{ "enabled", NULL },
+				{ "disabled", NULL },
+				{ NULL, NULL },
+			},
+			"enabled"
+		},
+		{
+			"bk_aspect_ratio",
+			"Aspect ratio",
+			NULL,
+			NULL,
+			NULL,
+			"system",
+			{
+				{ "1:1", NULL },
+				{ "4:3", NULL },
+				{ NULL, NULL },
+			},
+			"1:1"
+		},
+		{
+			"bk_layout",
+			"Keyboard Layout",
+			NULL,
+			NULL,
+			NULL,
+			"input",
+			{
+				{ "qwerty", NULL },
+				{ "jcuken", NULL },
+				{ NULL, NULL },
+			},
+			"qwerty"
+		},
+		{
+			"bk_keyboard_type",
+			"Keyboard type (restart)",
+			NULL,
+			NULL,
+			NULL,
+			"input",
+			{
+				{ "poll", NULL },
+				{ "callback", NULL },
+				{ NULL, NULL },
+			},
+			"poll"
+		},
+
+		{ "input_repeat",	"Key -> Repeat",	NULL, NULL, NULL, "input", {{NULL,NULL}}, "F1" },
+		{ "input_kt",		"Key -> KT",		NULL, NULL, NULL, "input", {{NULL,NULL}}, "F2" },
+		{ "input_r2",		"Key -> |--->",		NULL, NULL, NULL, "input", {{NULL,NULL}}, "F5" },
+		{ "input_l1",		"Key -> |<---",		NULL, NULL, NULL, "input", {{NULL,NULL}}, "F4" },
+		{ "input_r1",		"Key -> -|-->",		NULL, NULL, NULL, "input", {{NULL,NULL}}, "F3" },
+		{ "input_indsu",	"Key -> Ind Su",	NULL, NULL, NULL, "input", {{NULL,NULL}}, "F6" },
+		{ "input_block",	"Key -> Block",		NULL, NULL, NULL, "input", {{NULL,NULL}}, "F7" },
+		{ "input_step",		"Key -> Step",		NULL, NULL, NULL, "input", {{NULL,NULL}}, "F8" },
+		{ "input_reset",	"Key -> Reset",		NULL, NULL, NULL, "input", {{NULL,NULL}}, "F9" },
+		{ "input_tab",		"Key -> Tab",		NULL, NULL, NULL, "input", {{NULL,NULL}}, "Tab" },
+		{ "input_vs",		"Key -> Vs",		NULL, NULL, NULL, "input", {{NULL,NULL}}, "Home" },
+		{ "input_rus",		"Key -> Rus",		NULL, NULL, NULL, "input", {{NULL,NULL}}, "F11" },
+		{ "input_lat",		"Key -> Lat",		NULL, NULL, NULL, "input", {{NULL,NULL}}, "F12" },
+
+		{ NULL, NULL, NULL, NULL, NULL, NULL, {{0}}, NULL },
+	};
+
+	static const struct retro_core_option_value input_keys_values[RETRO_NUM_CORE_OPTION_VALUES_MAX] = {
+		{ "Tilde", NULL },
+		{ "Insert", NULL },
+		{ "Delete", NULL },
+		{ "Home", NULL },
+		{ "End", NULL },
+		{ "PageUP", NULL },
+		{ "PageDown", NULL },
+		{ "Tab", NULL },
+		{ "LShift", NULL },
+		{ "RShift", NULL },
+		{ "LAlt", NULL },
+		{ "RAlt", NULL },
+		{ "LCtrl", NULL },
+		{ "RCtrl", NULL },
+		{ "Keypad_0", NULL },
+		{ "Keypad_1", NULL },
+		{ "Keypad_2", NULL },
+		{ "Keypad_3", NULL },
+		{ "Keypad_4", NULL },
+		{ "Keypad_5", NULL },
+		{ "Keypad_6", NULL },
+		{ "Keypad_7", NULL },
+		{ "Keypad_8", NULL },
+		{ "Keypad_9", NULL },
+		{ "Keypad_Divide", NULL },
+		{ "Keypad_Multiply", NULL },
+		{ "Keypad_Add", NULL },
+		{ "Keypad_Substract", NULL },
+		{ "Keypad_Dot", NULL },
+		{ "Keypad_Enter", NULL },
+		{ "F1", NULL },
+		{ "F2", NULL },
+		{ "F3", NULL },
+		{ "F4", NULL },
+		{ "F5", NULL },
+		{ "F6", NULL },
+		{ "F7", NULL },
+		{ "F8", NULL },
+		{ "F9", NULL },
+		{ "F10", NULL },
+		{ "F11", NULL },
+		{ "F12", NULL },
+		{ NULL, NULL },
+	};
+	for (int n = 7; n <= 19; n++)
+		memcpy(&option_defs[n].values, &input_keys_values, sizeof input_keys_values);
+
+	struct retro_core_options_v2 options_v2 = { option_cats, option_defs };
+	cb(RETRO_ENVIRONMENT_SET_CORE_OPTIONS_V2, &options_v2);
+}
+
+void retro_set_environment(retro_environment_t cb)
+{
+	struct retro_log_callback logging;
+	bool no_rom = true;
+
+	environ_cb = cb;
+
+	cb(RETRO_ENVIRONMENT_SET_SUPPORT_NO_GAME, &no_rom);
+
+	if (cb(RETRO_ENVIRONMENT_GET_LOG_INTERFACE, &logging))
+		log_cb = logging.log;
+	else
+		log_cb = fallback_log;
+
+	unsigned version = 0;
+	if (!cb(RETRO_ENVIRONMENT_GET_CORE_OPTIONS_VERSION, &version)) version = 0;
+	if (version >= 2)
+		set_options_v2(cb);
+	else
+		set_options_v1(cb);
 
 	struct retro_vfs_interface_info vfs_interface_info;
 	vfs_interface_info.required_interface_version = 1;
