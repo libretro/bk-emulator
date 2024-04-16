@@ -176,9 +176,53 @@ void retro_set_environment(retro_environment_t cb)
 				"bk_aspect_ratio",
 				"Aspect ratio; 1:1|4:3",
 			},
+			{ "input_repeat", "", },
+			{ "input_kt", "", },
+			{ "input_r2", "", },
+			{ "input_l1", "", },
+			{ "input_r1", "", },
+			{ "input_indsu", "", },
+			{ "input_block", "", },
+			{ "input_step", "", },
+			{ "input_reset", "", },
+			{ "input_tab", "", },
+			{ "input_vs", "", },
+			{ "input_rus", "", },
+			{ "input_lat", "", },
 			{ NULL, NULL },
 		};
 
+	char buf[20][1024];
+	char* inp_opt = "Tilde|Insert|Delete|Home|End|PageUP|PageDown|Tab|LShift|RShift|LAlt|RAlt|LCtrl|RCtrl|Keypad_0|Keypad_1|Keypad_2|Keypad_3|Keypad_4|Keypad_5|Keypad_6|Keypad_7|Keypad_8|Keypad_9|Keypad_Divide|Keypad_Multiply|Keypad_Add|Keypad_Substract|Keypad_Dot|Keypad_Enter|F1|F2|F3|F4|F5|F6|F7|F8|F9|F10|F11|F12";
+	//Defaults
+	snprintf(buf[0], sizeof(buf[0]), "Input -> Repeat; F1|%s", inp_opt); variables[7].value = buf[0];
+	snprintf(buf[1], sizeof(buf[1]), "Input -> KT; F2|%s", inp_opt);     variables[8].value = buf[1];
+	snprintf(buf[2], sizeof(buf[2]), "Input -> |--->; F5|%s", inp_opt);  variables[9].value = buf[2];
+	snprintf(buf[3], sizeof(buf[3]), "Input -> |<---; F4|%s", inp_opt);  variables[10].value = buf[3];
+	snprintf(buf[4], sizeof(buf[4]), "Input -> -|-->; F3|%s", inp_opt);  variables[11].value = buf[4];
+	snprintf(buf[5], sizeof(buf[5]), "Input -> Ind Su; F6|%s", inp_opt); variables[12].value = buf[5];
+	snprintf(buf[6], sizeof(buf[6]), "Input -> Block; F7|%s", inp_opt);  variables[13].value = buf[6];
+	snprintf(buf[7], sizeof(buf[7]), "Input -> Step; F8|%s", inp_opt);   variables[14].value = buf[7];
+	snprintf(buf[8], sizeof(buf[8]), "Input -> Reset; F9|%s", inp_opt);  variables[15].value = buf[8];
+	snprintf(buf[9], sizeof(buf[9]), "Input -> Tab; Tab|%s", inp_opt);   variables[16].value = buf[9];
+	snprintf(buf[10], sizeof(buf[10]), "Input -> Vs; Home|%s", inp_opt); variables[17].value = buf[10];
+	snprintf(buf[11], sizeof(buf[11]), "Input -> Rus; F11|%s", inp_opt); variables[18].value = buf[11];
+	snprintf(buf[12], sizeof(buf[12]), "Input -> Lat; F12|%s", inp_opt); variables[19].value = buf[12];
+	cb(RETRO_ENVIRONMENT_SET_VARIABLES, variables);
+	//Real options
+	snprintf(buf[0], sizeof(buf[0]), "Input -> Repeat; %s", inp_opt); variables[7].value = buf[0];
+	snprintf(buf[1], sizeof(buf[1]), "Input -> KT; %s", inp_opt);     variables[8].value = buf[1];
+	snprintf(buf[2], sizeof(buf[2]), "Input -> |--->; %s", inp_opt);  variables[9].value = buf[2];
+	snprintf(buf[3], sizeof(buf[3]), "Input -> |<---; %s", inp_opt);  variables[10].value = buf[3];
+	snprintf(buf[4], sizeof(buf[4]), "Input -> -|-->; %s", inp_opt);  variables[11].value = buf[4];
+	snprintf(buf[5], sizeof(buf[5]), "Input -> Ind Su; %s", inp_opt); variables[12].value = buf[5];
+	snprintf(buf[6], sizeof(buf[6]), "Input -> Block; %s", inp_opt);  variables[13].value = buf[6];
+	snprintf(buf[7], sizeof(buf[7]), "Input -> Step; %s", inp_opt);   variables[14].value = buf[7];
+	snprintf(buf[8], sizeof(buf[8]), "Input -> Reset; %s", inp_opt);  variables[15].value = buf[8];
+	snprintf(buf[9], sizeof(buf[9]), "Input -> Tab; %s", inp_opt);    variables[16].value = buf[9];
+	snprintf(buf[10], sizeof(buf[10]), "Input -> Vs; %s", inp_opt);   variables[17].value = buf[10];
+	snprintf(buf[11], sizeof(buf[11]), "Input -> Rus; %s", inp_opt);  variables[18].value = buf[11];
+	snprintf(buf[12], sizeof(buf[12]), "Input -> Lat; %s", inp_opt);  variables[19].value = buf[12];
 	cb(RETRO_ENVIRONMENT_SET_VARIABLES, variables);
 
 	struct retro_vfs_interface_info vfs_interface_info;
