@@ -11,5 +11,5 @@ void libretro_vfs_read(struct libretro_handle *h, void *s, uint64_t len);
 void scr_mark_dirty (void);
 void tty_set_keymap (void);
 void tty_poll();
-char* strtoupper(char* str);
+char* strtoupper(const char* str);
 

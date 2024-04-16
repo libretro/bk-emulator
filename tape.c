@@ -36,7 +36,7 @@ static enum { Idle, Addr, Len, Name, Data, Checksum } fake_state = Idle;
 
 #define TAPE_RELAY_DELAY	10000
 
-char* strtoupper(char* str) {
+char* strtoupper(const char* str) {
 	int len = strlen(str);
 
 	//Allocate space for new string
