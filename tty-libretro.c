@@ -15,7 +15,7 @@ struct keymap {
 
 //BK Keycodes here: https://bk0010.pdp-11.ru/docs/out.html (check 8.3)
 
-static struct keymap qwerty = {
+static const struct keymap qwerty = {
 	.normal = {
 		[RETROK_ESCAPE]       = TTY_STOP,
 		//[RETROK_F1]           = 0201,          /* Repeat.  */
@@ -156,7 +156,7 @@ static struct keymap qwerty = {
 	},
 };
 
-static struct keymap jcuken = {
+static const struct keymap jcuken = {
 	.normal = {
 		[RETROK_ESCAPE]       = TTY_STOP,
 		//[RETROK_F1]           = 0201,          /* Repeat.  */
@@ -297,7 +297,7 @@ static struct keymap jcuken = {
 	},
 };
 
-static struct keymap *current_keymap = &qwerty;
+static const struct keymap *current_keymap = &qwerty;
 static bool curstate[RETROK_LAST];
 
 static RETRO_CALLCONV void keyboard_cb(bool down, unsigned keycode,
@@ -467,21 +467,22 @@ tty_set_keymap()
 		//current_keymap = &qwerty;
 		memcpy(&current_keymap_vals, &qwerty, sizeof(qwerty));
 	}
-	current_keymap = &current_keymap_vals;
+	
+	set_bk_key("input_repeat", 0201, &current_keymap_vals);
+	set_bk_key("input_kt", 003, &current_keymap_vals);
+	set_bk_key("input_r2", 027, &current_keymap_vals);
+	set_bk_key("input_l1", 026, &current_keymap_vals);
+	set_bk_key("input_r1", 0231, &current_keymap_vals);
+	set_bk_key("input_indsu", 0202, &current_keymap_vals);
+	set_bk_key("input_block", 0204, &current_keymap_vals);
+	set_bk_key("input_step", 0220, &current_keymap_vals);
+	set_bk_key("input_reset", 014, &current_keymap_vals);
+	set_bk_key("input_tab", 0x89, &current_keymap_vals);
+	set_bk_key("input_vs", 023, &current_keymap_vals);
+	set_bk_key("input_rus", 016, &current_keymap_vals);
+	set_bk_key("input_lat", 017, &current_keymap_vals);
 
-	set_bk_key("input_repeat", 0201, current_keymap);
-	set_bk_key("input_kt", 003, current_keymap);
-	set_bk_key("input_r2", 027, current_keymap);
-	set_bk_key("input_l1", 026, current_keymap);
-	set_bk_key("input_r1", 0231, current_keymap);
-	set_bk_key("input_indsu", 0202, current_keymap);
-	set_bk_key("input_block", 0204, current_keymap);
-	set_bk_key("input_step", 0220, current_keymap);
-	set_bk_key("input_reset", 014, current_keymap);
-	set_bk_key("input_tab", 0x89, current_keymap);
-	set_bk_key("input_vs", 023, current_keymap);
-	set_bk_key("input_rus", 016, current_keymap);
-	set_bk_key("input_lat", 017, current_keymap);
+	current_keymap = &current_keymap_vals;
 }
 
 void
