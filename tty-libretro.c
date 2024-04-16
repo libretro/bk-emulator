@@ -481,6 +481,7 @@ tty_set_keymap()
 	set_bk_key("input_vs", 023, &current_keymap_vals);
 	set_bk_key("input_rus", 016, &current_keymap_vals);
 	set_bk_key("input_lat", 017, &current_keymap_vals);
+	set_bk_key("input_colormode", 10000, &current_keymap_vals);
 
 	current_keymap = &current_keymap_vals;
 }
@@ -515,7 +516,8 @@ tty_poll() {
 			}
 
 			//Color mode hotkey
-			if (keycode == RETROK_KP5 && newstate) {
+			//if (keycode == RETROK_KP5 && newstate) {
+			if (curc && curc == 10000 && newstate) {
 				struct retro_variable var = { 0 };
 				var.key = "bk_color";
 				var.value = NULL;
