@@ -300,6 +300,22 @@ static const struct keymap jcuken = {
 static const struct keymap *current_keymap = &qwerty;
 static bool curstate[RETROK_LAST];
 
+void toggle_color_mode() {
+	struct retro_variable var = { 0 };
+	var.key = "bk_color";
+	var.value = NULL;
+	if (environ_cb(RETRO_ENVIRONMENT_GET_VARIABLE, &var) && var.value) {
+		if (strcmp(var.value, "enabled") == 0)
+			var.value = "disabled";
+		else
+			var.value = "enabled";
+	}
+	else {
+		var.value = "disabled";
+	}
+	environ_cb(RETRO_ENVIRONMENT_SET_VARIABLE, &var);
+}
+
 static RETRO_CALLCONV void keyboard_cb(bool down, unsigned keycode,
       uint32_t character, uint16_t mod)
 {
@@ -337,6 +353,11 @@ static RETRO_CALLCONV void keyboard_cb(bool down, unsigned keycode,
 	if (c == 0) {
 		return;
 	}
+
+	if (c == 10000 && down) { toggle_color_mode(); return; }
+	if (c == 10001 && down) { c = TTY_RESET; }
+	if (c == 10002 && down) { retro_reset(); return; }
+
 	/* TODO: caps lock.  */
 	if (ctrl && (c & 0100))
 		c &= 037;
@@ -522,23 +543,8 @@ tty_poll() {
 					c = curc;
 			}
 
-			//Color mode hotkey
-			if (curc && curc == 10000 && newstate) {
-				struct retro_variable var = { 0 };
-				var.key = "bk_color";
-				var.value = NULL;
-				if (environ_cb(RETRO_ENVIRONMENT_GET_VARIABLE, &var) && var.value) {
-					if (strcmp(var.value, "enabled") == 0)
-						var.value = "disabled";
-					else
-						var.value = "enabled";
-				}
-				else {
-					var.value = "disabled";
-				}
-				environ_cb(RETRO_ENVIRONMENT_SET_VARIABLE, &var);
-			}
-				
+			if (curc && curc == 10000 && newstate)
+				toggle_color_mode();
 		}
 	}
 
