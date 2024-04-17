@@ -483,6 +483,7 @@ tty_set_keymap()
 	set_bk_key("input_lat", 017, &current_keymap_vals);
 	set_bk_key("input_colormode", 10000, &current_keymap_vals);
 	set_bk_key("input_softreset", 10001, &current_keymap_vals);
+	set_bk_key("input_hardreset", 10002, &current_keymap_vals);
 
 	current_keymap = &current_keymap_vals;
 }
@@ -507,6 +508,9 @@ tty_poll() {
 				curc = current_keymap->shifted[keycode];
 			} else if (current_keymap->normal[keycode]) {
 				curc = current_keymap->normal[keycode];
+			}
+			if (curc && curc == 10002 && newstate) {
+				retro_reset(); return;
 			}
 			if (curc && curc == 10001 && newstate)
 				curc = TTY_RESET;
