@@ -196,8 +196,8 @@ void set_options_v1(retro_environment_t cb) {
 	snprintf(buf[8], sizeof(buf[8]), "Input -> Reset; F9|%s", inp_opt);  variables[15].value = buf[8];
 	snprintf(buf[9], sizeof(buf[9]), "Input -> Tab; Tab|%s", inp_opt);   variables[16].value = buf[9];
 	snprintf(buf[10], sizeof(buf[10]), "Input -> Vs; Home|%s", inp_opt); variables[17].value = buf[10];
-	snprintf(buf[11], sizeof(buf[11]), "Input -> Rus; F11|%s", inp_opt); variables[18].value = buf[11];
-	snprintf(buf[12], sizeof(buf[12]), "Input -> Lat; F12|%s", inp_opt); variables[19].value = buf[12];
+	snprintf(buf[11], sizeof(buf[11]), "Input -> Rus; Delete|%s", inp_opt); variables[18].value = buf[11];
+	snprintf(buf[12], sizeof(buf[12]), "Input -> Lat; PageDown|%s", inp_opt); variables[19].value = buf[12];
 	snprintf(buf[13], sizeof(buf[13]), "Key -> Hotkey -> Color Mode; Keypad_Multiply|%s", inp_opt); variables[20].value = buf[13];
 	snprintf(buf[14], sizeof(buf[14]), "Key -> Hotkey -> Soft Reset; F11|%s", inp_opt);				variables[21].value = buf[14];
 	snprintf(buf[15], sizeof(buf[15]), "Key -> Hotkey -> Hard Reset; F12|%s", inp_opt);				variables[22].value = buf[15];
@@ -354,8 +354,8 @@ void set_options_v2(retro_environment_t cb) {
 		{ "input_reset",	"Key -> Reset",		NULL, NULL, NULL, "input", {{NULL,NULL}}, "F9" },
 		{ "input_tab",		"Key -> Tab",		NULL, NULL, NULL, "input", {{NULL,NULL}}, "Tab" },
 		{ "input_vs",		"Key -> Vs",		NULL, NULL, NULL, "input", {{NULL,NULL}}, "Home" },
-		{ "input_rus",		"Key -> Rus",		NULL, NULL, NULL, "input", {{NULL,NULL}}, "F11" },
-		{ "input_lat",		"Key -> Lat",		NULL, NULL, NULL, "input", {{NULL,NULL}}, "F12" },
+		{ "input_rus",		"Key -> Rus",		NULL, NULL, NULL, "input", {{NULL,NULL}}, "Delete" },
+		{ "input_lat",		"Key -> Lat",		NULL, NULL, NULL, "input", {{NULL,NULL}}, "PageDown" },
 		{ "input_colormode",	"Key -> Hotkey -> Color Mode",	NULL, NULL, NULL, "input", {{NULL,NULL}}, "Keypad_Multiply" },
 		{ "input_softreset",	"Key -> Hotkey -> Soft Reset",	NULL, NULL, NULL, "input", {{NULL,NULL}}, "F11" },
 		{ "input_hardreset",	"Key -> Hotkey -> Hard Reset",	NULL, NULL, NULL, "input", {{NULL,NULL}}, "F12" },
