@@ -482,6 +482,7 @@ tty_set_keymap()
 	set_bk_key("input_rus", 016, &current_keymap_vals);
 	set_bk_key("input_lat", 017, &current_keymap_vals);
 	set_bk_key("input_colormode", 10000, &current_keymap_vals);
+	set_bk_key("input_softreset", 10001, &current_keymap_vals);
 
 	current_keymap = &current_keymap_vals;
 }
@@ -507,7 +508,7 @@ tty_poll() {
 			} else if (current_keymap->normal[keycode]) {
 				curc = current_keymap->normal[keycode];
 			}
-			if (keycode == RETROK_F11)
+			if (curc && curc == 10001 && newstate)
 				curc = TTY_RESET;
 			if (curc) {
 				change = 1;

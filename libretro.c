@@ -177,6 +177,7 @@ void set_options_v1(retro_environment_t cb) {
 		{ "input_rus", "", },
 		{ "input_lat", "", },
 		{ "input_colormode", "", },
+		{ "input_softreset", "", },
 		{ NULL, NULL },
 	};
 
@@ -197,6 +198,7 @@ void set_options_v1(retro_environment_t cb) {
 	snprintf(buf[11], sizeof(buf[11]), "Input -> Rus; F11|%s", inp_opt); variables[18].value = buf[11];
 	snprintf(buf[12], sizeof(buf[12]), "Input -> Lat; F12|%s", inp_opt); variables[19].value = buf[12];
 	snprintf(buf[13], sizeof(buf[13]), "Key -> Hotkey -> Color Mode; Keypad_Multiply|%s", inp_opt); variables[20].value = buf[13];
+	snprintf(buf[14], sizeof(buf[14]), "Key -> Hotkey -> Soft Reset; F11|%s", inp_opt);				variables[21].value = buf[14];
 	cb(RETRO_ENVIRONMENT_SET_VARIABLES, variables);
 	//Real options
 	snprintf(buf[0], sizeof(buf[0]), "Input -> Repeat; %s", inp_opt); variables[7].value = buf[0];
@@ -213,6 +215,7 @@ void set_options_v1(retro_environment_t cb) {
 	snprintf(buf[11], sizeof(buf[11]), "Input -> Rus; %s", inp_opt);  variables[18].value = buf[11];
 	snprintf(buf[12], sizeof(buf[12]), "Input -> Lat; %s", inp_opt);  variables[19].value = buf[12];
 	snprintf(buf[13], sizeof(buf[13]), "Key -> Hotkey -> Color Mode; %s", inp_opt); variables[20].value = buf[13];
+	snprintf(buf[14], sizeof(buf[14]), "Key -> Hotkey -> Soft Reset; %s", inp_opt);	variables[21].value = buf[14];
 	cb(RETRO_ENVIRONMENT_SET_VARIABLES, variables);
 }
 void set_options_v2(retro_environment_t cb) {
@@ -351,6 +354,7 @@ void set_options_v2(retro_environment_t cb) {
 		{ "input_rus",		"Key -> Rus",		NULL, NULL, NULL, "input", {{NULL,NULL}}, "F11" },
 		{ "input_lat",		"Key -> Lat",		NULL, NULL, NULL, "input", {{NULL,NULL}}, "F12" },
 		{ "input_colormode",	"Key -> Hotkey -> Color Mode",	NULL, NULL, NULL, "input", {{NULL,NULL}}, "Keypad_Multiply" },
+		{ "input_softreset",	"Key -> Hotkey -> Soft Reset",	NULL, NULL, NULL, "input", {{NULL,NULL}}, "F11" },
 
 		{ NULL, NULL, NULL, NULL, NULL, NULL, {{0}}, NULL },
 	};
@@ -400,7 +404,7 @@ void set_options_v2(retro_environment_t cb) {
 		{ "F12", NULL },
 		{ NULL, NULL },
 	};
-	for (int n = 7; n <= 20; n++)
+	for (int n = 7; n <= 21; n++)
 		memcpy(&option_defs[n].values, &input_keys_values, sizeof input_keys_values);
 
 	struct retro_core_options_v2 options_v2 = { option_cats, option_defs };
