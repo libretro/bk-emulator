@@ -183,7 +183,7 @@ void set_options_v1(retro_environment_t cb) {
 	};
 
 	char buf[20][1024];
-	char* inp_opt = "Tilde|Insert|Delete|Home|End|PageUP|PageDown|Tab|LShift|RShift|LAlt|RAlt|LCtrl|RCtrl|Keypad_0|Keypad_1|Keypad_2|Keypad_3|Keypad_4|Keypad_5|Keypad_6|Keypad_7|Keypad_8|Keypad_9|Keypad_Divide|Keypad_Multiply|Keypad_Add|Keypad_Substract|Keypad_Dot|Keypad_Enter|F1|F2|F3|F4|F5|F6|F7|F8|F9|F10|F11|F12";
+	char* inp_opt = "---|Tilde|Insert|Delete|Home|End|PageUP|PageDown|Tab|LShift|RShift|LAlt|RAlt|LCtrl|RCtrl|Keypad_0|Keypad_1|Keypad_2|Keypad_3|Keypad_4|Keypad_5|Keypad_6|Keypad_7|Keypad_8|Keypad_9|Keypad_Divide|Keypad_Multiply|Keypad_Add|Keypad_Substract|Keypad_Dot|Keypad_Enter|F1|F2|F3|F4|F5|F6|F7|F8|F9|F10|F11|F12";
 	//Defaults
 	snprintf(buf[0], sizeof(buf[0]), "Input -> Repeat; F1|%s", inp_opt); variables[7].value = buf[0];
 	snprintf(buf[1], sizeof(buf[1]), "Input -> KT; F2|%s", inp_opt);     variables[8].value = buf[1];
@@ -364,6 +364,7 @@ void set_options_v2(retro_environment_t cb) {
 	};
 
 	static const struct retro_core_option_value input_keys_values[RETRO_NUM_CORE_OPTION_VALUES_MAX] = {
+		{ "---", NULL },
 		{ "Tilde", NULL },
 		{ "Insert", NULL },
 		{ "Delete", NULL },

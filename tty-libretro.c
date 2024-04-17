@@ -352,9 +352,11 @@ static RETRO_CALLCONV void keyboard_cb(bool down, unsigned keycode,
 }
 
 int get_libretro_key(const char* key_name) {
-	if (strcmp(key_name, "Tilde") == 0)
+	if (strcmp(key_name, "---") == 0)
+		return 0;
+	else if (strcmp(key_name, "Tilde") == 0)
 		return RETROK_TILDE;
-	if (strcmp(key_name, "Insert") == 0)
+	else if (strcmp(key_name, "Insert") == 0)
 		return RETROK_INSERT;
 	else if (strcmp(key_name, "Delete") == 0)
 		return RETROK_DELETE;
