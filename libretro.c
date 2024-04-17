@@ -249,7 +249,7 @@ void set_options_v2(retro_environment_t cb) {
 			"BK-0010",						//default_value
 		},
 		{
-			"lynx_force_60hz",
+			"bk_peripheral",
 			"Peripheral (UP port, restart)",
 			NULL,
 			NULL,
