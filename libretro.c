@@ -111,7 +111,7 @@ void retro_get_system_info(struct retro_system_info *info)
    info->valid_extensions = "bin|img|dsk|bkd";
 }
 
-#define FPS 25
+#define FPS 50
 #define SAMPLE_RATE io_sound_freq
 
 void retro_get_system_av_info(struct retro_system_av_info *info)
