@@ -500,7 +500,7 @@ tty_poll() {
 	for (int keycode = 0; keycode < RETROK_LAST; keycode++) {
 		int newstate = input_state_cb(0, RETRO_DEVICE_KEYBOARD, 0, keycode);
 		if (curstate[keycode] != newstate) {
-			int curc;
+			int curc = 0;
 			curstate[keycode] = newstate;
 			if (shift && current_keymap->shifted[keycode]) {
 				curc = current_keymap->shifted[keycode];

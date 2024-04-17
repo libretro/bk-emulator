@@ -187,7 +187,7 @@ by the environment variable BK_PATH.\n"), romdir );
 	sim_init();		/* ...the simulated cpu */
 	mem_init();		/* ...main memory */
 	bk_scr_init();		/* video display */
-	boot_init(false);		/* ROM blocks */
+	boot_init(0);		/* ROM blocks */
 	if (terak) {
 		// setup_terak();
 	} else {

@@ -759,7 +759,7 @@ static bool load_game_real(const char *image_path,
 	sim_init();		/* ...the simulated cpu */
 	mem_init();		/* ...main memory */
 	bk_scr_init();		/* video display */
-	if (!boot_init(true))
+	if (!boot_init(1))
 	  return false;		/* ROM blocks */
 	q_reset();             /* ...any devices */
 
