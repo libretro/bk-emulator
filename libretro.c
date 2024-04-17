@@ -508,10 +508,6 @@ void retro_set_video_refresh(retro_video_refresh_t cb)
    video_cb = cb;
 }
 
-void retro_reset(void)
-{
-}
-
 #define MAX_SAMPLES_PER_FRAME 5000
 static const int16_t zero_samples[MAX_SAMPLES_PER_FRAME * 2];
 
@@ -763,7 +759,7 @@ static bool load_game_real(const char *image_path,
 	sim_init();		/* ...the simulated cpu */
 	mem_init();		/* ...main memory */
 	bk_scr_init();		/* video display */
-	if (!boot_init())
+	if (!boot_init(true))
 	  return false;		/* ROM blocks */
 	q_reset();             /* ...any devices */
 
@@ -843,6 +839,11 @@ bool retro_load_game(const struct retro_game_info *info)
 
 void retro_unload_game(void)
 {
+}
+
+void retro_reset(void)
+{
+	load_game_real(NULL, NULL, 0, NULL, 0);
 }
 
 unsigned retro_get_region(void)

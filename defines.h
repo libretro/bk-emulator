@@ -158,7 +158,7 @@ int load_src(register pdp_regs *p, d_word *data);
 
 extern void line_init(void);
 void bk_scr_init(void);
-int boot_init(void);
+int boot_init(int force);
 void timer_init(void);
 void printer_init(void);
 void covox_init(void);
