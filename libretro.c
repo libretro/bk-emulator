@@ -868,7 +868,7 @@ bool retro_unserialize(const void *data_, size_t size)
 		return false;
 
 	memcpy(&current_state, data_, sizeof (current_state));
-	scr_dirty = 1;
+	scr_mark_dirty();
 	return true;
 }
 
