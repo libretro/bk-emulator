@@ -668,7 +668,7 @@ void platform_disk_init(disk_t *disks) {
 		if (disk_size[i]) {
 			disks[i].length = disk_size[i];
 			disks[i].ro = 0;
-			disks[i].image = diskptr;
+			disks[i].image = (short unsigned int *)diskptr;
 		} else {
 			disks[i].length = 0;
 			disks[i].ro = 0;
