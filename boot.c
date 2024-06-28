@@ -81,11 +81,11 @@ static int load_rom11(d_word * rombuf, int byte_off, const char * rompath, int b
 }
 
 int
-boot_init()
+boot_init(int force)
 {
 	int ok = 1;
 	static unsigned char boot_done = 0;
-	if (boot_done) return 1;
+	if (force == 0 && boot_done) return 1;
 
 	boot_done = 1;
 

@@ -158,7 +158,7 @@ int load_src(register pdp_regs *p, d_word *data);
 
 extern void line_init(void);
 void bk_scr_init(void);
-int boot_init(void);
+int boot_init(int force);
 void timer_init(void);
 void printer_init(void);
 void covox_init(void);
@@ -571,6 +571,7 @@ static inline enum joystick_state JOYSTICK_BUTTON(int idx) {
 void platform_disk_init(disk_t *disks);
 
 extern char * tape_prefix;
+extern char * tape_suffix;
 
 void load_and_run_bin(const void *data, size_t sz);
 void *load_rom_file(const char * rompath, size_t *sz, size_t min_sz, size_t max_sz);

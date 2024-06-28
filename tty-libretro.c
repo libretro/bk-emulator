@@ -13,22 +13,26 @@ struct keymap {
 	int shifted[RETROK_LAST];
 };
 
+//BK Keycodes here: https://bk0010.pdp-11.ru/docs/out.html (check 8.3)
+
 static const struct keymap qwerty = {
 	.normal = {
 		[RETROK_ESCAPE]       = TTY_STOP,
-		[RETROK_F1]           = 0201,          /* Repeat.  */
-		[RETROK_F2]           = 003,           /* KT */
-		[RETROK_F3]           = 0231,          /* -|--> */
-		[RETROK_F4]           = 026,           /* |<--- */
-		[RETROK_F5]           = 027,           /* |---> */
-		[RETROK_F6]           = 0202,          /* ind su */
-		[RETROK_F7]           = 0204,          /* block edit */
-		[RETROK_F8]           = 0220,          /* step */
-		[RETROK_F9]           = 014,           /* clear */
+		//[RETROK_F1]           = 0201,          /* Repeat.  */
+		//[RETROK_F2]           = 003,           /* KT */
+		//[RETROK_F3]           = 0231,          /* -|--> */
+		//[RETROK_F4]           = 026,           /* |<--- */
+		//[RETROK_F5]           = 027,           /* |---> */
+		//[RETROK_F6]           = 0202,          /* ind su */
+		//[RETROK_F7]           = 0204,          /* block edit */
+		//[RETROK_F8]           = 0220,          /* step */
+		//[RETROK_F9]           = 014,           /* clear */
 		[RETROK_F10]          = TTY_STOP,      /* Stop (red button)*/
-		[RETROK_F11]          = 016,
-		[RETROK_F12]          = 017,
+		//[RETROK_F11]          = 016,           /* RUS */
+		//[RETROK_F12]          = 017,           /* LAT */
 		[RETROK_BREAK]        = TTY_STOP,
+		//[RETROK_INSERT]       = 016,		   /* RUS */
+		//[RETROK_PAGEUP]       = 017,           /* LAT */
 
 		[RETROK_BACKQUOTE]    = '`',
 		[RETROK_1]            = '1',
@@ -45,7 +49,7 @@ static const struct keymap qwerty = {
 		[RETROK_EQUALS]       = '=',
 		[RETROK_BACKSPACE]    = 0x18,
 
-		[RETROK_TAB]          = 0x89,
+		//[RETROK_TAB]          = 0x89,
 		[RETROK_q]             = 'q',
 		[RETROK_w]             = 'w',
 		[RETROK_e]             = 'e',
@@ -91,7 +95,12 @@ static const struct keymap qwerty = {
 		[RETROK_RIGHT]        = 031,
 		[RETROK_DOWN]         = 033,
 
-		[RETROK_HOME]         = 023,         /* vs */
+		[RETROK_KP7]          = 034,
+		[RETROK_KP9]          = 035,
+		[RETROK_KP1]          = 036,
+		[RETROK_KP3]          = 037,
+
+		//[RETROK_HOME]         = 023,         /* vs */
 	},
 	.shifted = {
 		[RETROK_BACKQUOTE]    = '~',
@@ -150,21 +159,21 @@ static const struct keymap qwerty = {
 static const struct keymap jcuken = {
 	.normal = {
 		[RETROK_ESCAPE]       = TTY_STOP,
-		[RETROK_F1]           = 0201,          /* Repeat.  */
-		[RETROK_F2]           = 003,           /* KT */
-		[RETROK_F3]           = 0231,          /* -|--> */
-		[RETROK_F4]           = 026,           /* |<--- */
-		[RETROK_F5]           = 027,           /* |---> */
-		[RETROK_F6]           = 0202,          /* ind su */
-		[RETROK_F7]           = 0204,          /* block edit */
-		[RETROK_F8]           = 0220,          /* step */
-		[RETROK_F9]           = 014,           /* clear */
+		//[RETROK_F1]           = 0201,          /* Repeat.  */
+		//[RETROK_F2]           = 003,           /* KT */
+		//[RETROK_F3]           = 0231,          /* -|--> */
+		//[RETROK_F4]           = 026,           /* |<--- */
+		//[RETROK_F5]           = 027,           /* |---> */
+		//[RETROK_F6]           = 0202,          /* ind su */
+		//[RETROK_F7]           = 0204,          /* block edit */
+		//[RETROK_F8]           = 0220,          /* step */
+		//[RETROK_F9]           = 014,           /* clear */
 		[RETROK_F10]          = TTY_STOP,      /* Stop (red button)*/
 
 		// Those 3 don't completely match original as there are no additional keys in bottom row
 		// on modern keyboard
-		[RETROK_F11]          = 016,
-		[RETROK_F12]          = 017,
+		//[RETROK_F11]          = 016,
+		//[RETROK_F12]          = 017,
 		[RETROK_BREAK]        = TTY_STOP,
 
 		[RETROK_BACKQUOTE]    = ';',
@@ -182,7 +191,7 @@ static const struct keymap jcuken = {
 		[RETROK_EQUALS]       = '/',
 		[RETROK_BACKSPACE]    = 0x18,
 
-		[RETROK_TAB]          = 0x89,
+		//[RETROK_TAB]          = 0x89,
 		[RETROK_q]             = 'J',
 		[RETROK_w]             = 'C',
 		[RETROK_e]             = 'U',
@@ -230,7 +239,7 @@ static const struct keymap jcuken = {
 		[RETROK_RIGHT]        = 031,
 		[RETROK_DOWN]         = 033,
 
-		[RETROK_HOME]         = 023,         /* vs */
+		//[RETROK_HOME]         = 023,         /* vs */
 	},
 	.shifted = {
 		[RETROK_BACKQUOTE]    = '+',
@@ -291,6 +300,22 @@ static const struct keymap jcuken = {
 static const struct keymap *current_keymap = &qwerty;
 static bool curstate[RETROK_LAST];
 
+void toggle_color_mode() {
+	struct retro_variable var = { 0 };
+	var.key = "bk_color";
+	var.value = NULL;
+	if (environ_cb(RETRO_ENVIRONMENT_GET_VARIABLE, &var) && var.value) {
+		if (strcmp(var.value, "enabled") == 0)
+			var.value = "disabled";
+		else
+			var.value = "enabled";
+	}
+	else {
+		var.value = "disabled";
+	}
+	environ_cb(RETRO_ENVIRONMENT_SET_VARIABLE, &var);
+}
+
 static RETRO_CALLCONV void keyboard_cb(bool down, unsigned keycode,
       uint32_t character, uint16_t mod)
 {
@@ -328,6 +353,11 @@ static RETRO_CALLCONV void keyboard_cb(bool down, unsigned keycode,
 	if (c == 0) {
 		return;
 	}
+
+	if (c == 10000 && down) { toggle_color_mode(); return; }
+	if (c == 10001 && down) { c = TTY_RESET; }
+	if (c == 10002 && down) { retro_reset(); return; }
+
 	/* TODO: caps lock.  */
 	if (ctrl && (c & 0100))
 		c &= 037;
@@ -337,6 +367,111 @@ static RETRO_CALLCONV void keyboard_cb(bool down, unsigned keycode,
 	    c |= 0200;
 	}
 	tty_keyevent(c);
+
+
+	//fprintf(stderr, "Send keycode: <%d>\n", c);
+}
+
+int get_libretro_key(const char* key_name) {
+	if (strcmp(key_name, "---") == 0)
+		return 0;
+	else if (strcmp(key_name, "Tilde") == 0)
+		return RETROK_TILDE;
+	else if (strcmp(key_name, "Insert") == 0)
+		return RETROK_INSERT;
+	else if (strcmp(key_name, "Delete") == 0)
+		return RETROK_DELETE;
+	else if (strcmp(key_name, "Home") == 0)
+		return RETROK_HOME;
+	else if (strcmp(key_name, "End") == 0)
+		return RETROK_END;
+	else if (strcmp(key_name, "PageUP") == 0)
+		return RETROK_PAGEUP;
+	else if (strcmp(key_name, "PageDown") == 0)
+		return RETROK_PAGEDOWN;
+	else if (strcmp(key_name, "Tab") == 0)
+		return RETROK_TAB;
+	else if (strcmp(key_name, "LShift") == 0)
+		return RETROK_LSHIFT;
+	else if (strcmp(key_name, "RShift") == 0)
+		return RETROK_RSHIFT;
+	else if (strcmp(key_name, "LAlt") == 0)
+		return RETROK_LALT;
+	else if (strcmp(key_name, "RAlt") == 0)
+		return RETROK_RALT;
+	else if (strcmp(key_name, "LCtrl") == 0)
+		return RETROK_LCTRL;
+	else if (strcmp(key_name, "RCtrl") == 0)
+		return RETROK_RCTRL;
+	else if (strcmp(key_name, "Keypad_0") == 0)
+		return RETROK_KP0;
+	else if (strcmp(key_name, "Keypad_1") == 0)
+		return RETROK_KP1;
+	else if (strcmp(key_name, "Keypad_2") == 0)
+		return RETROK_KP2;
+	else if (strcmp(key_name, "Keypad_3") == 0)
+		return RETROK_KP3;
+	else if (strcmp(key_name, "Keypad_4") == 0)
+		return RETROK_KP4;
+	else if (strcmp(key_name, "Keypad_5") == 0)
+		return RETROK_KP5;
+	else if (strcmp(key_name, "Keypad_6") == 0)
+		return RETROK_KP6;
+	else if (strcmp(key_name, "Keypad_7") == 0)
+		return RETROK_KP7;
+	else if (strcmp(key_name, "Keypad_8") == 0)
+		return RETROK_KP8;
+	else if (strcmp(key_name, "Keypad_9") == 0)
+		return RETROK_KP9;
+	else if (strcmp(key_name, "Keypad_Divide") == 0)
+		return RETROK_KP_DIVIDE;
+	else if (strcmp(key_name, "Keypad_Multiply") == 0)
+		return RETROK_KP_MULTIPLY;
+	else if (strcmp(key_name, "Keypad_Add") == 0)
+		return RETROK_KP_MINUS;
+	else if (strcmp(key_name, "Keypad_Substract") == 0)
+		return RETROK_KP_PLUS;
+	else if (strcmp(key_name, "Keypad_Dot") == 0)
+		return RETROK_KP_PERIOD;
+	else if (strcmp(key_name, "Keypad_Enter") == 0)
+		return RETROK_KP_ENTER;
+	else if (strcmp(key_name, "F1") == 0)
+		return RETROK_F1;
+	else if (strcmp(key_name, "F2") == 0)
+		return RETROK_F2;
+	else if (strcmp(key_name, "F3") == 0)
+		return RETROK_F3;
+	else if (strcmp(key_name, "F4") == 0)
+		return RETROK_F4;
+	else if (strcmp(key_name, "F5") == 0)
+		return RETROK_F5;
+	else if (strcmp(key_name, "F6") == 0)
+		return RETROK_F6;
+	else if (strcmp(key_name, "F7") == 0)
+		return RETROK_F7;
+	else if (strcmp(key_name, "F8") == 0)
+		return RETROK_F8;
+	else if (strcmp(key_name, "F9") == 0)
+		return RETROK_F9;
+	else if (strcmp(key_name, "F10") == 0)
+		return RETROK_F10;
+	else if (strcmp(key_name, "F11") == 0)
+		return RETROK_F11;
+	else if (strcmp(key_name, "F12") == 0)
+		return RETROK_F12;
+
+	else
+		return 0;
+}
+void set_bk_key(const char* key_name, int bk_key_code, struct keymap* keycodes) {
+	int k = 0;
+	struct retro_variable var;
+	var.key = key_name; var.value = NULL;
+	if (environ_cb(RETRO_ENVIRONMENT_GET_VARIABLE, &var) && var.value) {
+		k = get_libretro_key(var.value);
+		//current_keymap->normal[k] = bk_key_code;
+		keycodes->normal[k] = bk_key_code;
+	}
 }
 
 void
@@ -347,11 +482,33 @@ tty_set_keymap()
 	var.key = "bk_layout";
 	var.value = NULL;
 
+	static struct keymap current_keymap_vals;
 	if (environ_cb(RETRO_ENVIRONMENT_GET_VARIABLE, &var) && var.value && strcmp(var.value, "jcuken") == 0) {
-		current_keymap = &jcuken;		
+		//current_keymap = &jcuken;		
+		memcpy(&current_keymap_vals, &jcuken, sizeof(jcuken));
 	} else {
-		current_keymap = &qwerty;
+		//current_keymap = &qwerty;
+		memcpy(&current_keymap_vals, &qwerty, sizeof(qwerty));
 	}
+	
+	set_bk_key("input_repeat", 0201, &current_keymap_vals);
+	set_bk_key("input_kt", 003, &current_keymap_vals);
+	set_bk_key("input_r2", 027, &current_keymap_vals);
+	set_bk_key("input_l1", 026, &current_keymap_vals);
+	set_bk_key("input_r1", 0231, &current_keymap_vals);
+	set_bk_key("input_indsu", 0202, &current_keymap_vals);
+	set_bk_key("input_block", 0204, &current_keymap_vals);
+	set_bk_key("input_step", 0220, &current_keymap_vals);
+	set_bk_key("input_reset", 014, &current_keymap_vals);
+	set_bk_key("input_tab", 0x89, &current_keymap_vals);
+	set_bk_key("input_vs", 023, &current_keymap_vals);
+	set_bk_key("input_rus", 016, &current_keymap_vals);
+	set_bk_key("input_lat", 017, &current_keymap_vals);
+	set_bk_key("input_colormode", 10000, &current_keymap_vals);
+	set_bk_key("input_softreset", 10001, &current_keymap_vals);
+	set_bk_key("input_hardreset", 10002, &current_keymap_vals);
+
+	current_keymap = &current_keymap_vals;
 }
 
 void
@@ -368,20 +525,26 @@ tty_poll() {
 	for (int keycode = 0; keycode < RETROK_LAST; keycode++) {
 		int newstate = input_state_cb(0, RETRO_DEVICE_KEYBOARD, 0, keycode);
 		if (curstate[keycode] != newstate) {
-			int curc;
+			int curc = 0;
 			curstate[keycode] = newstate;
 			if (shift && current_keymap->shifted[keycode]) {
 				curc = current_keymap->shifted[keycode];
 			} else if (current_keymap->normal[keycode]) {
 				curc = current_keymap->normal[keycode];
 			}
-			if (keycode == RETROK_F11)
+			if (curc && curc == 10002 && newstate) {
+				retro_reset(); return;
+			}
+			if (curc && curc == 10001 && newstate)
 				curc = TTY_RESET;
 			if (curc) {
 				change = 1;
 				if (newstate)
 					c = curc;
 			}
+
+			if (curc && curc == 10000 && newstate)
+				toggle_color_mode();
 		}
 	}
 

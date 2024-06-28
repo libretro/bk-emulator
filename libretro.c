@@ -111,7 +111,7 @@ void retro_get_system_info(struct retro_system_info *info)
    info->valid_extensions = "bin|img|dsk|bkd";
 }
 
-#define FPS 25
+#define FPS 50
 #define SAMPLE_RATE io_sound_freq
 
 void retro_get_system_av_info(struct retro_system_av_info *info)
@@ -132,6 +132,290 @@ enum {
 	SUBSYSTEM_4_FLOPPIES,
 };
 
+void set_options_v1(retro_environment_t cb) {
+	static struct retro_variable variables[] =
+	{
+		{
+			"bk_model",
+			"Model (restart); BK-0010|BK-0010.01|BK-0010.01 + FDD|BK-0011M + FDD|Terak 8510/a|Slow BK-0011M",
+		},
+		{
+			"bk_peripheral",
+			"Peripheral (UP port, restart); none|covox|ay_3_8910|mouse_high|mouse_low|joystick",
+		},
+		{
+			"bk_layout",
+			"Keyboard layout; qwerty|jcuken",
+		},
+		{
+			"bk_doublespeed",
+			"Double CPU speed; disabled|enabled",
+		},
+		{
+			"bk_color",
+			"Use color display; enabled|disabled",
+		},
+		{
+			"bk_keyboard_type",
+			"Keyboard type (restart); poll|callback",
+		},
+		{
+			"bk_aspect_ratio",
+			"Aspect ratio; 1:1|4:3",
+		},
+		{ "input_repeat", "", },
+		{ "input_kt", "", },
+		{ "input_r2", "", },
+		{ "input_l1", "", },
+		{ "input_r1", "", },
+		{ "input_indsu", "", },
+		{ "input_block", "", },
+		{ "input_step", "", },
+		{ "input_reset", "", },
+		{ "input_tab", "", },
+		{ "input_vs", "", },
+		{ "input_rus", "", },
+		{ "input_lat", "", },
+		{ "input_colormode", "", },
+		{ "input_softreset", "", },
+		{ "input_hardreset", "", },
+		{ NULL, NULL },
+	};
+
+	char buf[20][1024];
+	char* inp_opt = "---|Tilde|Insert|Delete|Home|End|PageUP|PageDown|Tab|LShift|RShift|LAlt|RAlt|LCtrl|RCtrl|Keypad_0|Keypad_1|Keypad_2|Keypad_3|Keypad_4|Keypad_5|Keypad_6|Keypad_7|Keypad_8|Keypad_9|Keypad_Divide|Keypad_Multiply|Keypad_Add|Keypad_Substract|Keypad_Dot|Keypad_Enter|F1|F2|F3|F4|F5|F6|F7|F8|F9|F10|F11|F12";
+	//Defaults
+	snprintf(buf[0], sizeof(buf[0]), "Input -> Repeat; F1|%s", inp_opt); variables[7].value = buf[0];
+	snprintf(buf[1], sizeof(buf[1]), "Input -> KT; F2|%s", inp_opt);     variables[8].value = buf[1];
+	snprintf(buf[2], sizeof(buf[2]), "Input -> |--->; F5|%s", inp_opt);  variables[9].value = buf[2];
+	snprintf(buf[3], sizeof(buf[3]), "Input -> |<---; F4|%s", inp_opt);  variables[10].value = buf[3];
+	snprintf(buf[4], sizeof(buf[4]), "Input -> -|-->; F3|%s", inp_opt);  variables[11].value = buf[4];
+	snprintf(buf[5], sizeof(buf[5]), "Input -> Ind Su; F6|%s", inp_opt); variables[12].value = buf[5];
+	snprintf(buf[6], sizeof(buf[6]), "Input -> Block; F7|%s", inp_opt);  variables[13].value = buf[6];
+	snprintf(buf[7], sizeof(buf[7]), "Input -> Step; F8|%s", inp_opt);   variables[14].value = buf[7];
+	snprintf(buf[8], sizeof(buf[8]), "Input -> Reset; F9|%s", inp_opt);  variables[15].value = buf[8];
+	snprintf(buf[9], sizeof(buf[9]), "Input -> Tab; Tab|%s", inp_opt);   variables[16].value = buf[9];
+	snprintf(buf[10], sizeof(buf[10]), "Input -> Vs; Home|%s", inp_opt); variables[17].value = buf[10];
+	snprintf(buf[11], sizeof(buf[11]), "Input -> Rus; Delete|%s", inp_opt); variables[18].value = buf[11];
+	snprintf(buf[12], sizeof(buf[12]), "Input -> Lat; PageDown|%s", inp_opt); variables[19].value = buf[12];
+	snprintf(buf[13], sizeof(buf[13]), "Key -> Hotkey -> Color Mode; Keypad_Multiply|%s", inp_opt); variables[20].value = buf[13];
+	snprintf(buf[14], sizeof(buf[14]), "Key -> Hotkey -> Soft Reset; F11|%s", inp_opt);				variables[21].value = buf[14];
+	snprintf(buf[15], sizeof(buf[15]), "Key -> Hotkey -> Hard Reset; F12|%s", inp_opt);				variables[22].value = buf[15];
+	cb(RETRO_ENVIRONMENT_SET_VARIABLES, variables);
+	//Real options
+	snprintf(buf[0], sizeof(buf[0]), "Input -> Repeat; %s", inp_opt); variables[7].value = buf[0];
+	snprintf(buf[1], sizeof(buf[1]), "Input -> KT; %s", inp_opt);     variables[8].value = buf[1];
+	snprintf(buf[2], sizeof(buf[2]), "Input -> |--->; %s", inp_opt);  variables[9].value = buf[2];
+	snprintf(buf[3], sizeof(buf[3]), "Input -> |<---; %s", inp_opt);  variables[10].value = buf[3];
+	snprintf(buf[4], sizeof(buf[4]), "Input -> -|-->; %s", inp_opt);  variables[11].value = buf[4];
+	snprintf(buf[5], sizeof(buf[5]), "Input -> Ind Su; %s", inp_opt); variables[12].value = buf[5];
+	snprintf(buf[6], sizeof(buf[6]), "Input -> Block; %s", inp_opt);  variables[13].value = buf[6];
+	snprintf(buf[7], sizeof(buf[7]), "Input -> Step; %s", inp_opt);   variables[14].value = buf[7];
+	snprintf(buf[8], sizeof(buf[8]), "Input -> Reset; %s", inp_opt);  variables[15].value = buf[8];
+	snprintf(buf[9], sizeof(buf[9]), "Input -> Tab; %s", inp_opt);    variables[16].value = buf[9];
+	snprintf(buf[10], sizeof(buf[10]), "Input -> Vs; %s", inp_opt);   variables[17].value = buf[10];
+	snprintf(buf[11], sizeof(buf[11]), "Input -> Rus; %s", inp_opt);  variables[18].value = buf[11];
+	snprintf(buf[12], sizeof(buf[12]), "Input -> Lat; %s", inp_opt);  variables[19].value = buf[12];
+	snprintf(buf[13], sizeof(buf[13]), "Key -> Hotkey -> Color Mode; %s", inp_opt); variables[20].value = buf[13];
+	snprintf(buf[14], sizeof(buf[14]), "Key -> Hotkey -> Soft Reset; %s", inp_opt);	variables[21].value = buf[14];
+	snprintf(buf[15], sizeof(buf[15]), "Key -> Hotkey -> Hard Reset; %s", inp_opt);	variables[22].value = buf[15];
+	cb(RETRO_ENVIRONMENT_SET_VARIABLES, variables);
+}
+void set_options_v2(retro_environment_t cb) {
+	struct retro_core_option_v2_category option_cats[] = {
+		{
+			"system",
+			"System",
+			"Configure system parameters."
+		},
+		{
+			"input",
+			"Input",
+			"Remap keyboard system keys."
+		},
+		{ NULL, NULL, NULL },
+	};
+	struct retro_core_option_v2_definition option_defs[] = {
+		{
+			"bk_model",						//Key
+			"Model (restart)",				//Description
+			NULL,							//descr_categorized
+			"Model of the emulated computer.",
+			NULL,							//info categorized
+			"system",						//category_key
+			{
+				{ "BK-0010", "BK-0010" },
+				{ "BK-0010.01", "BK-0010.01" },
+				{ "BK-0010.01 + FDD", "BK-0010.01 + FDD" },
+				{ "BK-0011M + FDD", "BK-0011M + FDD" },
+				{ "Terak 8510/a", "Terak 8510/a" },
+				{ "Slow BK-0011M", "Slow BK-0011M" },
+				{ NULL, NULL },
+			},
+			"BK-0010",						//default_value
+		},
+		{
+			"bk_peripheral",
+			"Peripheral (UP port, restart)",
+			NULL,
+			NULL,
+			NULL,
+			"system",
+			{
+				{ "none", "None" },
+				{ "covox", "Covox" },
+				{ "ay_3_8910", "AY 3 8910" },
+				{ "mouse_high", "Mouse (high)" },
+				{ "mouse_low", "Mouse (low)" },
+				{ "joystick", "Joystick" },
+				{ NULL, NULL },
+			},
+			"none"
+		},
+		{
+			"bk_doublespeed",
+			"Double CPU speed",
+			NULL,
+			NULL,
+			NULL,
+			"system",
+			{
+				{ "disabled", NULL },
+				{ "enabled", NULL },
+				{ NULL, NULL },
+			},
+			"disabled"
+		},
+		{
+			"bk_color",
+			"Use color display",
+			NULL,
+			NULL,
+			NULL,
+			"system",
+			{
+				{ "enabled", NULL },
+				{ "disabled", NULL },
+				{ NULL, NULL },
+			},
+			"enabled"
+		},
+		{
+			"bk_aspect_ratio",
+			"Aspect ratio",
+			NULL,
+			NULL,
+			NULL,
+			"system",
+			{
+				{ "1:1", NULL },
+				{ "4:3", NULL },
+				{ NULL, NULL },
+			},
+			"1:1"
+		},
+		{
+			"bk_layout",
+			"Keyboard Layout",
+			NULL,
+			NULL,
+			NULL,
+			"input",
+			{
+				{ "qwerty", NULL },
+				{ "jcuken", NULL },
+				{ NULL, NULL },
+			},
+			"qwerty"
+		},
+		{
+			"bk_keyboard_type",
+			"Keyboard type (restart)",
+			NULL,
+			NULL,
+			NULL,
+			"input",
+			{
+				{ "poll", NULL },
+				{ "callback", NULL },
+				{ NULL, NULL },
+			},
+			"poll"
+		},
+
+		{ "input_repeat",	"Key -> Repeat",	NULL, NULL, NULL, "input", {{NULL,NULL}}, "F1" },
+		{ "input_kt",		"Key -> KT",		NULL, NULL, NULL, "input", {{NULL,NULL}}, "F2" },
+		{ "input_r2",		"Key -> |--->",		NULL, NULL, NULL, "input", {{NULL,NULL}}, "F5" },
+		{ "input_l1",		"Key -> |<---",		NULL, NULL, NULL, "input", {{NULL,NULL}}, "F4" },
+		{ "input_r1",		"Key -> -|-->",		NULL, NULL, NULL, "input", {{NULL,NULL}}, "F3" },
+		{ "input_indsu",	"Key -> Ind Su",	NULL, NULL, NULL, "input", {{NULL,NULL}}, "F6" },
+		{ "input_block",	"Key -> Block",		NULL, NULL, NULL, "input", {{NULL,NULL}}, "F7" },
+		{ "input_step",		"Key -> Step",		NULL, NULL, NULL, "input", {{NULL,NULL}}, "F8" },
+		{ "input_reset",	"Key -> Reset",		NULL, NULL, NULL, "input", {{NULL,NULL}}, "F9" },
+		{ "input_tab",		"Key -> Tab",		NULL, NULL, NULL, "input", {{NULL,NULL}}, "Tab" },
+		{ "input_vs",		"Key -> Vs",		NULL, NULL, NULL, "input", {{NULL,NULL}}, "Home" },
+		{ "input_rus",		"Key -> Rus",		NULL, NULL, NULL, "input", {{NULL,NULL}}, "Delete" },
+		{ "input_lat",		"Key -> Lat",		NULL, NULL, NULL, "input", {{NULL,NULL}}, "PageDown" },
+		{ "input_colormode",	"Key -> Hotkey -> Color Mode",	NULL, NULL, NULL, "input", {{NULL,NULL}}, "Keypad_Multiply" },
+		{ "input_softreset",	"Key -> Hotkey -> Soft Reset",	NULL, NULL, NULL, "input", {{NULL,NULL}}, "F11" },
+		{ "input_hardreset",	"Key -> Hotkey -> Hard Reset",	NULL, NULL, NULL, "input", {{NULL,NULL}}, "F12" },
+
+		{ NULL, NULL, NULL, NULL, NULL, NULL, {{0}}, NULL },
+	};
+
+	static const struct retro_core_option_value input_keys_values[RETRO_NUM_CORE_OPTION_VALUES_MAX] = {
+		{ "---", NULL },
+		{ "Tilde", NULL },
+		{ "Insert", NULL },
+		{ "Delete", NULL },
+		{ "Home", NULL },
+		{ "End", NULL },
+		{ "PageUP", NULL },
+		{ "PageDown", NULL },
+		{ "Tab", NULL },
+		{ "LShift", NULL },
+		{ "RShift", NULL },
+		{ "LAlt", NULL },
+		{ "RAlt", NULL },
+		{ "LCtrl", NULL },
+		{ "RCtrl", NULL },
+		{ "Keypad_0", NULL },
+		{ "Keypad_1", NULL },
+		{ "Keypad_2", NULL },
+		{ "Keypad_3", NULL },
+		{ "Keypad_4", NULL },
+		{ "Keypad_5", NULL },
+		{ "Keypad_6", NULL },
+		{ "Keypad_7", NULL },
+		{ "Keypad_8", NULL },
+		{ "Keypad_9", NULL },
+		{ "Keypad_Divide", NULL },
+		{ "Keypad_Multiply", NULL },
+		{ "Keypad_Add", NULL },
+		{ "Keypad_Substract", NULL },
+		{ "Keypad_Dot", NULL },
+		{ "Keypad_Enter", NULL },
+		{ "F1", NULL },
+		{ "F2", NULL },
+		{ "F3", NULL },
+		{ "F4", NULL },
+		{ "F5", NULL },
+		{ "F6", NULL },
+		{ "F7", NULL },
+		{ "F8", NULL },
+		{ "F9", NULL },
+		{ "F10", NULL },
+		{ "F11", NULL },
+		{ "F12", NULL },
+		{ NULL, NULL },
+	};
+	for (int n = 7; n <= 22; n++)
+		memcpy(&option_defs[n].values, &input_keys_values, sizeof input_keys_values);
+
+	struct retro_core_options_v2 options_v2 = { option_cats, option_defs };
+	cb(RETRO_ENVIRONMENT_SET_CORE_OPTIONS_V2, &options_v2);
+}
+
 void retro_set_environment(retro_environment_t cb)
 {
 	struct retro_log_callback logging;
@@ -146,40 +430,12 @@ void retro_set_environment(retro_environment_t cb)
 	else
 		log_cb = fallback_log;
 
-	static struct retro_variable variables[] =
-		{
-			{
-				"bk_model",
-				"Model (restart); BK-0010|BK-0010.01|BK-0010.01 + FDD|BK-0011M + FDD|Terak 8510/a|Slow BK-0011M",
-			},
-			{
-				"bk_peripheral",
-				"Peripheral (UP port, restart); none|covox|ay_3_8910|mouse_high|mouse_low|joystick",
-			},
-			{
-				"bk_layout",
-				"Keyboard layout; qwerty|jcuken",
-			},
-			{
-				"bk_doublespeed",
-				"Double CPU speed; disabled|enabled",
-			},
-			{
-				"bk_color",
-				"Use color display; enabled|disabled",
-			},
-			{
-				"bk_keyboard_type",
-				"Keyboard type (restart); poll|callback",
-			},
-			{
-				"bk_aspect_ratio",
-				"Aspect ratio; 1:1|4:3",
-			},
-			{ NULL, NULL },
-		};
-
-	cb(RETRO_ENVIRONMENT_SET_VARIABLES, variables);
+	unsigned version = 0;
+	if (!cb(RETRO_ENVIRONMENT_GET_CORE_OPTIONS_VERSION, &version)) version = 0;
+	if (version >= 2)
+		set_options_v2(cb);
+	else
+		set_options_v1(cb);
 
 	struct retro_vfs_interface_info vfs_interface_info;
 	vfs_interface_info.required_interface_version = 1;
@@ -259,10 +515,6 @@ void retro_set_input_state(retro_input_state_t cb)
 void retro_set_video_refresh(retro_video_refresh_t cb)
 {
    video_cb = cb;
-}
-
-void retro_reset(void)
-{
 }
 
 #define MAX_SAMPLES_PER_FRAME 5000
@@ -416,15 +668,22 @@ static bool load_game_real(const char *image_path,
 	const char *dir;
 	int i;
 
+	bool is_basic = false;
+	bool is_focal = false;
 	if (image_path) {
                 char *slash = strrchr(image_path, '/');
+                if (!slash) slash = strrchr(image_path, '\\');
                 if (slash) {
                         tape_prefix = strdup(image_path);
                         tape_prefix[slash - image_path + 1] = '\0';
+						tape_suffix = slash + 1;
+						//fprintf(stderr, "Tape suffix is: <%s>\n", tape_suffix);
                 }
+				is_basic = strstr(strtoupper(image_path), "BASIC") != NULL;
+				is_focal = strstr(strtoupper(image_path), "FOCAL") != NULL;
         }
 	
-	if (bin) {
+	if (bin && !is_basic && !is_focal) {
 		void *gd = malloc(bin_size);
 		if (!gd)
 			return false;
@@ -468,6 +727,9 @@ static bool load_game_real(const char *image_path,
 	}
 
 	update_variables(true);
+	
+	if (is_basic) bkmodel = 1;
+	else if (is_focal) bkmodel = 0;
 
 	switch( bkmodel ) {
 	case 0: /* BK0010 */
@@ -506,7 +768,7 @@ static bool load_game_real(const char *image_path,
 	sim_init();		/* ...the simulated cpu */
 	mem_init();		/* ...main memory */
 	bk_scr_init();		/* video display */
-	if (!boot_init())
+	if (!boot_init(1))
 	  return false;		/* ROM blocks */
 	q_reset();             /* ...any devices */
 
@@ -588,6 +850,11 @@ void retro_unload_game(void)
 {
 }
 
+void retro_reset(void)
+{
+	load_game_real(NULL, NULL, 0, NULL, 0);
+}
+
 unsigned retro_get_region(void)
 {
    return RETRO_REGION_NTSC;
@@ -610,7 +877,7 @@ bool retro_unserialize(const void *data_, size_t size)
 		return false;
 
 	memcpy(&current_state, data_, sizeof (current_state));
-	scr_dirty = 1;
+	scr_mark_dirty();
 	return true;
 }
 
