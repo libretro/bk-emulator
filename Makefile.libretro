@@ -132,6 +132,9 @@ else ifeq ($(platform), tvos-arm64)
    fpic := -fPIC
    SHARED := -dynamiclib
    DEFINES := -DIOS
+   MINVERSION = -mappletvos-version-min=11.0
+   CFLAGS += $(MINVERSION)
+   SHARED += $(MINVERSION)
 ifeq ($(IOSSDK),)
    IOSSDK := $(shell xcodebuild -version -sdk appletvos Path)
 endif
